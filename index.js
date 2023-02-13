@@ -83,4 +83,12 @@ app.delete('/delete-one-chat/:index',jwtToken,(req,res)=>{
     })
 })
 
+app.get('/try-demo/:question',async (req, res) => {
+    console.log('request received')
+    let question = req.params.question
+    service.tryDemo(question,openai).then((result) => {
+        res.status(result.statusCode).json(result)
+    })
+})
+
 

@@ -128,11 +128,38 @@ const deleteOneChat = (req,index)=>{
         }
     })
 }
+
+const tryDemo = async (question,openai) => {
+    let errorMsg = ''
+    try {
+        console.log('requesting')
+        const response = await openai.createCompletion({
+            model: 'text-davinci-003',
+            prompt: `${question}###`,
+            max_tokens: 64,
+            temperature: 0,
+            top_p: 1.0
+        })
+    console.log('requested')
+        return {
+            statusCode:200,
+            dberrorMsg:errorMsg,
+            answer: response.data.choices[0].text
+        }
+    } catch (error) {
+        return {
+            statusCode:400,
+            message:error.response ? error.response.data:'There is an issue in server'
+        }
+    }
+}
+
 module.exports = {
     askQuestion,
     register,
     login,
     getQuestionArray,
     deleteAllChats,
-    deleteOneChat
+    deleteOneChat,
+    tryDemo
 }
