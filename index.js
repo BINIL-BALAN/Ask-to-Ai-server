@@ -69,4 +69,18 @@ app.get('/get-questions',jwtToken,(req,res)=>{
      })
 })
 
+app.delete('/delete-all-chats',jwtToken,(req,res)=>{
+    service.deleteAllChats(req).then((result)=>{
+        res.status(result.statusCode).json(result)
+    })
+})
+
+app.delete('/delete-one-chat/:index',jwtToken,(req,res)=>{
+    console.log('delete one chat');
+   let index = req.params.index
+    service.deleteOneChat(req,index).then((result)=>{
+        res.status(result.statusCode).json(result)
+    })
+})
+
 

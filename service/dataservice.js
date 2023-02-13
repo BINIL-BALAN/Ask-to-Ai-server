@@ -64,7 +64,7 @@ const askQuestion = async (question,req,openai) => {
             temperature: 0,
             top_p: 1.0
         })
-    
+    console.log('requested')
         return {
             statusCode:200,
             dberrorMsg:errorMsg,
@@ -93,9 +93,46 @@ const getQuestionArray=(req)=>{
           }
    })
 }
+
+const deleteAllChats = (req)=>{
+   return db.User.findOne({email:req.email}).then((result)=>{
+       if(result){
+        result.questions = []
+        result.save()
+            return{
+                statusCode:200,
+                message:'All message clear'
+            }
+       }else{
+        return{
+            statusCode:400,
+            message:'Something went wrong'
+        }
+    }
+   })
+}
+const deleteOneChat = (req,index)=>{
+    return db.User.findOne({email:req.email}).then((result)=>{
+        if(result){
+          result.questions.splice(index,1)
+          result.save()
+          return{
+            statusCode:200,
+            message:'Chat deleted'
+          }
+        }else{
+            return{
+                statusCode:400,
+                message:'Something went wrong'
+              }
+        }
+    })
+}
 module.exports = {
     askQuestion,
     register,
     login,
-    getQuestionArray
+    getQuestionArray,
+    deleteAllChats,
+    deleteOneChat
 }
